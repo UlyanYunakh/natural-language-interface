@@ -1,0 +1,57 @@
+@model Client.Models.DictionaryItem
+@{
+    ViewBag.Title = "Редактирование";
+}
+@{
+    string editForm1Id = "editForm1Id" + Model.Id;
+    string editForm2Id = "editForm2Id" + Model.Id;
+    string edit1Id = "edit1Id" + Model.Id;
+    string edit2Id = "edit2Id" + Model.Id;
+}
+
+<div class="bg-light p-3 mb-2 rounded border" style="border-color: #dee2e6">
+    <h1>Редактирование:</h1>
+</div>
+
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <button id="@editForm1Id" class="nav-edit-1 nav-link bg-light active" type="button"
+            style="border-bottom-color: #f8f9fa" value="@Model.Id">Способ 1</button>
+    </li>
+    <li class="nav-item">
+        <button id="@editForm2Id" class="nav-edit-2 nav-link" type="button" value="@Model.Id">Cпособ 2</button>
+    </li>
+</ul>
+
+<div id="@edit1Id">
+    @await Html.PartialAsync("_Form", Model)
+</div>
+
+<div id="@edit2Id" class="d-none">
+    @await Html.PartialAsync("_TextWordForm", Model)
+</div>
+
+@section Scripts{
+    <script>
+        $(".nav-edit-1").on("click", function () {
+            var id = $(this).val();
+            $("#editForm2Id" + id).removeClass("bg-light active");
+            $("#editForm2Id" + id).css("border-bottom-color", "#dee2e6");
+            $("#edit2Id" + id).addClass("d-none");
+            $("#edit1Id" + id).removeClass("d-none");
+            $(this).addClass("bg-light active");
+            $(this).css("border-bottom-color", "#f8f9fa");
+        });
+    </script>
+    <script>
+        $(".nav-edit-2").on("click", function () {
+            var id = $(this).val();
+            $("#editForm1Id" + id).removeClass("bg-light active");
+            $("#editForm1Id" + id).css("border-bottom-color", "#dee2e6");
+            $("#edit1Id" + id).addClass("d-none");
+            $("#edit2Id" + id).removeClass("d-none");
+            $(this).addClass("bg-light active");
+            $(this).css("border-bottom-color", "#f8f9fa");
+        });
+    </script>
+}

@@ -1,0 +1,148 @@
+@model Client.Models.DictionaryItem
+<form asp-action="Save" asp-route-id="@Model.Id" asp-route-isDescription="false" asp-route-description="@Model.Description" class="bg-light p-3 rounded-bottom border border-top-0" style="border-color: #dee2e6">
+    <div class="row mb-2">
+        <div class="col-xl-7">
+            <div class="form-floating">
+                <input type="text" class="form-control" id="word" placeholder="example" asp-for="Word">
+                <label for="word" asp-for="Word">Слово</label>
+            </div>
+        </div>
+        <div class="col-xl-5">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="true" checked="@Model.IsWordform" id="isWordform" asp-for="IsWordform">
+                <label class="form-check-label" for="isWordform" asp-for="IsWordform">
+                    Словоформа
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="true" checked="@Model.IsShort" id="isShort" asp-for="IsShort">
+                <label class="form-check-label" for="isShort" asp-for="IsShort">
+                    Краткое
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-xl-6">
+            <div class="form-floating">
+                <select class="form-select" id="partOfSpeech" aria-label="select" asp-for="PartOfSpeech">
+                    <option selected>Пусто</option>
+                    <option value="Имя существительное">Имя существительное</option>
+                    <option value="Имя прилагательное">Имя прилагательное</option>
+                    <option value="Имя числительное">Имя числительное</option>
+                    <option value="Местоимение">Местоимение</option>
+                    <option value="Глагол">Глагол</option>
+                    <option value="Наречие">Наречие</option>
+                    <option value="Предикатив">Предикатив</option>
+                    <option value="Причастие">Причастие</option>
+                    <option value="Деепричастие">Деепричастие</option>
+                    <option value="Предлог">Предлог</option>
+                    <option value="Союз">Союз</option>
+                    <option value="Частица">Частица</option>
+                </select>
+                <label for="partOfSpeech" asp-for="PartOfSpeech">Часть речи</label>
+            </div>
+        </div>
+        <div class="col-xl-3">
+            <div class="form-floating">
+                <select class="form-select" id="kind" aria-label="select" asp-for="Kind">
+                    <option selected>Пусто</option>
+                    <option value="Мужской род">муж.</option>
+                    <option value="Женский род">жен.</option>
+                    <option value="Средний род">ср.</option>
+                </select>
+                <label for="kind" asp-for="Kind">Род</label>
+            </div>
+        </div>
+        <div class="col-xl-3">
+            <div class="form-floating">
+                <select class="form-select" id="number" aria-label="select" asp-for="Number">
+                    <option selected>Пусто</option>
+                    <option value="Единственное число">ед.</option>
+                    <option value="Множественное число">мн.</option>
+                </select>
+                <label for="number" asp-for="Number">Число</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-xl-5">
+            <div class="form-floating">
+                <select class="form-select" id="case" aria-label="select" asp-for="Case">
+                    <option selected>Пусто</option>
+                    <option value="Единственное падеж">Именительный</option>
+                    <option value="Родительный падеж">Родительный</option>
+                    <option value="Дательный падеж">Дательный</option>
+                    <option value="Винительный падеж">Винительный</option>
+                    <option value="Творительный падеж">Творительный</option>
+                    <option value="Предложный падеж">Предложный</option>
+                </select>
+                <label for="case" asp-for="Case">Падеж</label>
+            </div>
+        </div>
+        <div class="col-xl-3">
+            <div class="form-floating">
+                <select class="form-select" id="person" aria-label="select" asp-for="Person">
+                    <option selected>Пусто</option>
+                    <option value="1-е лицо">1-е</option>
+                    <option value="2-е лицо">2-е</option>
+                    <option value="3-е лицо">3-е</option>
+                </select>
+                <label for="person" asp-for="Person">Лицо</label>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="form-floating">
+                <select class="form-select" id="time" aria-label="select" asp-for="Time">
+                    <option selected>Пусто</option>
+                    <option value="Настоящее время">наст.</option>
+                    <option value="Будущее время">буд.</option>
+                    <option value="Прошлое время">прош.</option>
+                </select>
+                <label for="time" asp-for="Time">Время</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-xl-5">
+            <div class="form-floating">
+                <select class="form-select" id="form" aria-label="select" asp-for="Form">
+                    <option selected>Пусто</option>
+                    <option value="Несовершенный вид">Несовершенный</option>
+                    <option value="Совершенный вид">Совершенный</option>
+                </select>
+                <label for="form" asp-for="Form">Вид</label>
+            </div>
+        </div>
+        <div class="col-xl-7">
+            <div class="form-floating">
+                <select class="form-select" id="degree" aria-label="select" asp-for="Degree">
+                    <option selected>Пусто</option>
+                    <option value="Сравнительная степень">Сравнительная</option>
+                    <option value="Превосходная степень">Превосходная</option>
+                </select>
+                <label for="degree" asp-for="Degree">Степень сравнения</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col">
+            <div class="form-floating">
+                <select class="form-select" id="animality" aria-label="select" asp-for="Animality">
+                    <option selected>Пусто</option>
+                    <option value="Одушевленное">Одушевленное</option>
+                    <option value="Неодушевленное">Неодушевленное</option>
+                </select>
+                <label for="animality" asp-for="Animality">Одушевленность</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group d-grid gap-2">
+        <button type="submit"class="btn btn-primary">Сохранить слово</button>
+    </div>
+</form>
