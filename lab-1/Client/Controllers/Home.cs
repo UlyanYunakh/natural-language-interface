@@ -9,16 +9,16 @@ namespace Client.Controllers
 {
     public class Home : Controller
     {
-        private DictionaryItemContext db;
-        public Home(DictionaryItemContext context)
+        private Dictionary _dictionary;
+        public Home(Dictionary context)
         {
-            db = context;
+            _dictionary = context;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await db.DictionaryItems.ToListAsync());
+            return View(_dictionary.Items.OrderBy(i => i.Word));
         }
 
         [HttpGet]
@@ -32,10 +32,9 @@ namespace Client.Controllers
             return PartialView("_TextWordForm");
         }
         [HttpPost]
-        public async Task<IActionResult> Save(DictionaryItem item)
+        public IActionResult Save(DictionaryItem item)
         {
-            db.DictionaryItems.Update(item);
-            await db.SaveChangesAsync();
+            _dictionary.Save(item);
             return RedirectToAction("Index");
         }
 
@@ -55,11 +54,11 @@ namespace Client.Controllers
         // *** exit ***
 
         [HttpGet]
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id != null)
             {
-                DictionaryItem item = await db.DictionaryItems.FirstOrDefaultAsync(p => p.Id == id);
+                DictionaryItem item = _dictionary.Find(id);
                 if (item != null)
                 {
                     return View(item);
@@ -68,17 +67,12 @@ namespace Client.Controllers
             return NotFound();
         }
         [HttpGet]
-        public async Task<IActionResult> DeleteItem(int? id)
+        public IActionResult DeleteItem(int? id)
         {
             if (id != null)
             {
-                DictionaryItem item = await db.DictionaryItems.FirstOrDefaultAsync(p => p.Id == id);
-                if (item != null)
-                {
-                    db.DictionaryItems.Remove(item);
-                    await db.SaveChangesAsync();
-                    return RedirectToAction("Index");
-                }
+                _dictionary.Remove(id);
+                return RedirectToAction("Index");
             }
             return NotFound();
         }
