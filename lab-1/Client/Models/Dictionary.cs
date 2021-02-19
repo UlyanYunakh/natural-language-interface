@@ -43,20 +43,10 @@ namespace Client.Models
 
         public void Remove(int? id)
         {
-            var item = Items.Where(i => i.Id == id).FirstOrDefault();
-            Items.Remove(item);
+            // var item = Items.Where(i => i.Id == id).FirstOrDefault();
+            Items.Remove(Find(id));
         }
 
-        public DictionaryItem Find(int? id)
-        {
-            foreach (DictionaryItem item in Items)
-            {
-                if (item.Id == id)
-                {
-                    return item;
-                }
-            }
-            return null;
-        }
+        public DictionaryItem Find(int? id) => Items.Where(i => i.Id == id).FirstOrDefault();
     }
 }
