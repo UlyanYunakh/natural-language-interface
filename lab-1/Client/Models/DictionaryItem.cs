@@ -1,5 +1,8 @@
+using System;
+
 namespace Client.Models
 {
+    [Serializable]
     public class DictionaryItem
     {
         public int Id { get; set; }

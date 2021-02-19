@@ -4,6 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Client.Models;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+using Newtonsoft.Json;
+using System.Text;
+using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 
 namespace Client.Controllers
 {
@@ -75,6 +81,38 @@ namespace Client.Controllers
                 return RedirectToAction("Index");
             }
             return NotFound();
+        }
+
+
+        [HttpGet]
+        public IActionResult Upload()
+        {
+            return PartialView("_UploadForm");
+        }
+        [HttpPost]
+        public IActionResult Upload(IFormFile file)
+        {
+            if (file != null)
+            {
+                byte[] fileBytes = null;
+                using (var binaryReader = new BinaryReader(file.OpenReadStream()))
+                {
+                    fileBytes = binaryReader.ReadBytes((int)file.Length);
+                }
+                string json = Encoding.UTF8.GetString(fileBytes);
+                _dictionary.Items = JsonConvert.DeserializeObject<List<DictionaryItem>>(json);
+                return RedirectToAction("Index");
+            }
+            return NotFound();
+        }
+        
+        [HttpGet]
+        public IActionResult Download()
+        {
+            string file = JsonConvert.SerializeObject(_dictionary.Items);
+            byte[] bytes = Encoding.UTF8.GetBytes(file);
+            MemoryStream memoryStream = new MemoryStream(bytes);
+            return File(memoryStream, "application/json", "dictionary.json");
         }
     }
 }

@@ -1,0 +1,15 @@
+@model Client.Models.FileInfo
+<form asp-action="Upload" enctype="multipart/form-data">
+    <div class="row d-flex justify-content-end align-items-center">
+        <div class="col-xl-3">
+            <div class="form-group d-grid gap-2">
+                <button type="submit" class="btn btn-outline-dark" type="button">Загрузить</button>
+            </div>
+        </div>
+        <div class="col-xl-9">
+            <div class="custom-file">
+                <input asp-for="File" type="file" class="custom-file-input" required>
+            </div>
+        </div>
+    </div>
+</form>

@@ -10,23 +10,10 @@
             <h1>Словарь:</h1>
         </div>
         <div class="col-xl-6">
-            <form asp-action="">
-                <div class="row d-flex justify-content-end align-items-center">
-                    <div class="col-xl-3">
-                        <div class="form-group d-grid gap-2">
-                            <button type="submit" class="btn btn-outline-dark" type="button" disabled>Загрузить</button>
-                        </div>
-                    </div>
-                    <div class="col-xl-9">
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" required disabled>
-                        </div>
-                    </div>
-                </div>
-            </form>
+            @await Html.PartialAsync("_UploadForm", new FileInfo())
         </div>
         <div class="col-xl-3 d-flex justify-content-end">
-            <a class="btn btn-outline-dark mx-2 disabled" asp-action="">Сохранить</a>
+            <a class="btn btn-outline-dark mx-2" asp-action="Download">Сохранить</a>
             <a class="btn btn-outline-warning disabled" asp-action="">Помощь</a>
         </div>
     </div>
