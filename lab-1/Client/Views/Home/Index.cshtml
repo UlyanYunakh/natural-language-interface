@@ -6,12 +6,28 @@
 
 <div class="bg-light p-3 mb-2 rounded border" style="border-color: #dee2e6">
     <div class="row justify-content-between align-items-center">
-        <div class="col-sm">
+        <div class="col-xl-3">
             <h1>Словарь:</h1>
         </div>
-        <div class="col-sm d-flex justify-content-end">
-            <a class="btn btn-warning mx-2" asp-action="" asp-route-id="">Помощь</a>
-            <a class="btn btn-info" asp-action="" asp-route-id="">Сохранить словарь</a>
+        <div class="col-xl-6">
+            <form asp-action="">
+                <div class="row d-flex justify-content-end align-items-center">
+                    <div class="col-xl-3">
+                        <div class="form-group d-grid gap-2">
+                            <button type="submit" class="btn btn-outline-dark" type="button" disabled>Загрузить</button>
+                        </div>
+                    </div>
+                    <div class="col-xl-9">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" required disabled>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-xl-3 d-flex justify-content-end">
+            <a class="btn btn-outline-dark mx-2 disabled" asp-action="">Сохранить</a>
+            <a class="btn btn-outline-warning disabled" asp-action="">Помощь</a>
         </div>
     </div>
 </div>
