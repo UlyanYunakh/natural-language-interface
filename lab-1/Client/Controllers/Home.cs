@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System.Text;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
+using Client.Utilities;
 
 namespace Client.Controllers
 {
@@ -100,16 +101,20 @@ namespace Client.Controllers
                     fileBytes = binaryReader.ReadBytes((int)file.Length);
                 }
                 string json = Encoding.UTF8.GetString(fileBytes);
-                _dictionary.Items = JsonConvert.DeserializeObject<List<DictionaryItem>>(json);
+                if (ItemsConverter.ValidateJson(json))
+                {
+                    _dictionary.Items = ItemsConverter.ConvertFromJson(json);
+                    _dictionary.RecountItems();
+                }
                 return RedirectToAction("Index");
             }
             return NotFound();
         }
-        
+
         [HttpGet]
         public IActionResult Download()
         {
-            string file = JsonConvert.SerializeObject(_dictionary.Items);
+            string file = ItemsConverter.ConvertToJson(_dictionary.Items);
             byte[] bytes = Encoding.UTF8.GetBytes(file);
             MemoryStream memoryStream = new MemoryStream(bytes);
             return File(memoryStream, "application/json", "dictionary.json");

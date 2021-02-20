@@ -42,12 +42,18 @@ namespace Client.Models
             }
         }
 
-        public void Remove(int? id)
-        {
-            // var item = Items.Where(i => i.Id == id).FirstOrDefault();
-            Items.Remove(Find(id));
-        }
+        public void Remove(int? id) => Items.Remove(Find(id));
 
         public DictionaryItem Find(int? id) => Items.Where(i => i.Id == id).FirstOrDefault();
+
+        public void RecountItems()
+        {
+            _count = 1;
+            for (int i = 0; i < Items.Count; i++)
+            {
+                Items[i].Id = _count;
+                _count++;
+            }
+        }
     }
 }
