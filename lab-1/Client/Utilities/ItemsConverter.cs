@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace Client.Utilities
 {
-    public static class ItemsConverter
+    internal static class ItemsConverter
     {
-        public static bool ValidateJson(string json)
+        internal static bool ValidateJson(string json)
         {
             try
             {
@@ -19,10 +19,18 @@ namespace Client.Utilities
             return true;
         }
 
-        public static List<DictionaryItem> ConvertFromJson(string json)
+        internal static List<DictionaryItem> ConvertFromJson(string json)
             => JsonConvert.DeserializeObject<List<DictionaryItem>>(json);
 
-        public static string ConvertToJson(List<DictionaryItem> items) 
+        internal static string ConvertItemsToJson(List<DictionaryItem> items)
             => JsonConvert.SerializeObject(items);
+
+        private record JsonRequest
+        {
+            public string Text { get; set; }
+        }
+
+        internal static string ConvertStringToJsonRequest(string text)
+            => JsonConvert.SerializeObject(new JsonRequest() { Text = text });
     }
 }
