@@ -3,7 +3,6 @@ import nltk
 import json
 from pymorphy2 import MorphAnalyzer
 
-
 def check_form(words_dict, form, normal):
     forms_in_dict = words_dict[normal]['word_forms']
     if form not in forms_in_dict:
@@ -22,8 +21,9 @@ def wordize(sentences):
 
 # основная функция которая и нужна
 def parser(text):
+    json_text = ""
     # словарь
-    dictionary = {}
+    dictionary = []
     # массив слов из текста
     words = wordize(text)
     # анализатор русских слов
@@ -34,37 +34,33 @@ def parser(text):
         parse_word = analyzer.parse(word)[0]
         # само слова
         word_normal_form = parse_word.normal_form
-        # характеристики
-        word_tags = parse_word.tag.cyr_repr
         # словоформа
         word_form = parse_word.word.lower()
+        is_wordform = True
+        if word_form == word_normal_form:
+            is_wordform = False
 
-        if word_normal_form not in dictionary:
-            '''
-            Структура словаря: 
-            -слово:
-                -количество использования слова
-                формы:
-                    -форма
-                    -количество использования формы
-            -тэг
-            '''
-            dictionary.update({word_normal_form: {
-                'count': 1, 
-                'word_forms': {word_form: 1}, 
-                'tag': word_tags}
-                })
-        else:
-            check_form(dictionary, word_form, word_normal_form)
-            values = dictionary.get(word_normal_form)
-            # добавление количества использования слова
-            values['count'] += 1
-    # возвращает отсортированный словарь, сортировка по основной форме слова
-    # создает файл
-    with open('dict.json', 'w') as json_file:
-        # переводит в json, если не работает попробуй убрать 'ensure_ascii = False'
-        json.dump(dictionary, json_file, ensure_ascii = False)
-    return sorted(dictionary.items(), key=lambda word: word[0])
+        in_dict = False
+        for item in dictionary:
+            if word_form == item['Word']:
+                in_dict = True
+                item['Frequency'] += 1
+        if not in_dict:
+            dictionary_item = ({'Word': word_form, 'IsWordform': is_wordform, 'Frequency': 1})
+            dictionary.append(dictionary_item)
+    json_text = dict_in_json(dictionary)
+    print(json_text)
+    return json_text
+
+def dict_in_json(dictionary):
+    string = "["
+    for item in dictionary:
+        string += json.dumps(item, ensure_ascii = False)
+        string += ","
+    string = string[0:-1]
+    string += "]"
+    return string
+
 
 data = parser("мама папа я семья ехала на дачу даче умерли")
 print(data)
