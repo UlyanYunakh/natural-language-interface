@@ -2,15 +2,17 @@ using System.Linq;
 using System;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+// using Microsoft.EntityFrameworkCore;
 using Client.Models;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
-using Newtonsoft.Json;
+// using Newtonsoft.Json;
 using System.Text;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using Client.Utilities;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace Client.Controllers
 {
@@ -45,20 +47,47 @@ namespace Client.Controllers
             return RedirectToAction("Index");
         }
 
-        // *** do not touch yet **
-
         [HttpGet]
         public IActionResult TextForm()
         {
             return PartialView("_TextForm");
         }
         [HttpPost]
-        public IActionResult TextForm(int? id)
+        public async Task<IActionResult> TextForm(string text)
         {
+            try
+            {
+                string jsonRequest = ItemsConverter.ConvertStringToJsonRequest(text);
+
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new Uri("http://localhost:8080/");
+                client.DefaultRequestHeaders
+                      .Accept
+                      .Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "relativeAddress");
+
+                request.Content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
+
+
+                await client.SendAsync(request)
+                      .ContinueWith(responseTask =>
+                      {
+                          byte[] responce = responseTask.Result.Content.ReadAsByteArrayAsync().Result;
+                          string json = Encoding.UTF8.GetString(responce);
+                          if (ItemsConverter.ValidateJson(json))
+                          {
+                              _dictionary.Items = ItemsConverter.ConvertFromJson(json);
+                              _dictionary.RecountItems();
+                          }
+                      });
+            }
+            catch
+            {
+            }
+
             return RedirectToAction("Index");
         }
-
-        // *** exit ***
 
         [HttpGet]
         public IActionResult Edit(int? id)
@@ -114,7 +143,7 @@ namespace Client.Controllers
         [HttpGet]
         public IActionResult Download()
         {
-            string file = ItemsConverter.ConvertToJson(_dictionary.Items);
+            string file = ItemsConverter.ConvertItemsToJson(_dictionary.Items);
             byte[] bytes = Encoding.UTF8.GetBytes(file);
             MemoryStream memoryStream = new MemoryStream(bytes);
             return File(memoryStream, "application/json", "dictionary.json");
