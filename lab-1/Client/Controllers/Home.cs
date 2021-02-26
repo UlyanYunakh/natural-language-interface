@@ -148,5 +148,11 @@ namespace Client.Controllers
             MemoryStream memoryStream = new MemoryStream(bytes);
             return File(memoryStream, "application/json", "dictionary.json");
         }
+
+        [HttpGet]
+        public IActionResult About()
+        {
+            return View();
+        }
     }
 }
