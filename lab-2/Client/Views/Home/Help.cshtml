@@ -1,8 +1,27 @@
 @{
-    ViewData["Title"] = "Страница помощи";
+    ViewData["Title"] = "Помощь";
 }
 
 <div class="text-center">
     <h1>@ViewData["Title"]</h1>
-    <a class="btn btn-primary" asp-action="Index">Вернуться</a>
+    <p>На этой странице вы можете ознакомится с возможностями нашего сайта.</p>
+</div>
+
+<div class="my-2">
+    <h2>Форма:</h2>
+</div>
+<div>
+    <p>Воспользуйтесь кнопкой <img src="~/src/img/load.png" alt="" />, после чего выберите файл формата .rtf с
+        анализируемым текстом или файл формата .json с сохраненным деревом. Нажмите <img src="~/src/img/submit.png" alt="" />.</p>
+</div>
+
+<div class="my-2">
+    <h2>Сохранение:</h2>
+</div>
+<div>
+    <p>Воспользуйтесь кнопкой <img src="~/src/img/save.png" alt="" />, для того, чтобы сохранить дерево в файл формата .json.</p>
+</div>
+
+<div class="row">
+    <a class="btn btn-outline-primary" asp-action="Index">Вернуться</a>
 </div>
