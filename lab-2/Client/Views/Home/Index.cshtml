@@ -12,7 +12,7 @@
     <form asp-action="Index" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="formFile" class="form-label">Выберите файл с анализируемым текстом (*.rtf)</label>
-            <input class="form-control" asp-for="File" type="file" accept=".rtf" id="formFile" required>
+            <input class="form-control" asp-for="File" type="file" accept=".rtf,.json" id="formFile" required>
         </div>
         <div class="mb-3 d-grid gap-2">
             <button type="submit" class="btn btn-primary">Анализировать</button>
@@ -31,9 +31,18 @@
                 <pre class="bg-light p-2 border">@ViewBag.ResponceModel.Trees[i]</pre>  
             </div>
         }
+        <a class="btn btn-outline-primary my-3" asp-action="Download" asp-route-text="@ViewBag.Text">Сохранить</a>
     }
     else if (ViewBag.ServerError == true)
     {
         <p class="text-danger">Сервер не отвечает</p>
+    }
+    else if (ViewBag.ParseError == true)
+    {
+        <p class="text-danger">Неверные данные в JSON файле</p>
+    }
+    else if (ViewBag.Error == true)
+    {
+        <p class="text-danger">Неверный файл</p>
     }
 </div>

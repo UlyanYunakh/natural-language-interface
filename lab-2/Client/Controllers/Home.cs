@@ -34,16 +34,41 @@ namespace Client.Controllers
                 {
                     fileBytes = binaryReader.ReadBytes((int)file.Length);
                 }
+
                 ViewBag.Text = Encoding.UTF8.GetString(fileBytes);
 
-                ViewBag.ResponceModel = null;
-                ViewBag.ResponceModel = await PostToPythonServer(ViewBag.Text);
+                if (file.ContentType == "application/json")
+                {
+                    ResponceModel responceModel = JsonToModel(ViewBag.Text);
 
-                if (ViewBag.ResponceModel == null)
-                    ViewBag.ServerError = true;
-                else
-                    ViewBag.IsResult = true;
+                    string text = "";
+                    foreach (string str in responceModel.Sents)
+                        text += str + " ";
+                    ViewBag.Text = text;
 
+                    ViewBag.ResponceModel = responceModel;
+
+                    if (ViewBag.ResponceModel == null)
+                        ViewBag.ParseError = true;
+                    else
+                        ViewBag.IsResult = true;
+
+                    return View();
+                }
+
+                if (file.ContentType == "application/rtf")
+                {
+                    ViewBag.ResponceModel = await PostToPythonServer(ViewBag.Text);
+
+                    if (ViewBag.ResponceModel == null)
+                        ViewBag.ServerError = true;
+                    else
+                        ViewBag.IsResult = true;
+
+                    return View();
+                }
+
+                ViewBag.Error = true;
                 return View();
             }
             else
@@ -51,6 +76,20 @@ namespace Client.Controllers
                 ViewBag.IsResult = false;
                 return View();
             }
+        }
+
+        private ResponceModel JsonToModel(string json)
+        {
+            ResponceModel model = null;
+
+            try
+            {
+                model = JsonConvert.DeserializeObject<ResponceModel>(json);
+            }
+            catch
+            { }
+
+            return model;
         }
 
         private async Task<ResponceModel> PostToPythonServer(string text)
@@ -88,6 +127,16 @@ namespace Client.Controllers
         public IActionResult Help()
         {
             return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Download(string text)
+        {
+            ResponceModel responceModel = await PostToPythonServer(text);
+            string file = JsonConvert.SerializeObject(responceModel);
+            byte[] bytes = Encoding.UTF8.GetBytes(file);
+            MemoryStream memoryStream = new MemoryStream(bytes);
+            return File(memoryStream, "application/json", "trees.json");
         }
     }
 }
