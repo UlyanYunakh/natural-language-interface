@@ -1,8 +1,27 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model Client.Models.FileInfo
+@{
+    ViewData["Title"] = "Главная страница";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row">
+    <div class="text-center position-relative">
+        <h1>@ViewData["Title"]</h1>
+        <a class="btn btn-outline-secondary position-absolute top-0 end-0" asp-action="Help">Помощь</a>
+    </div>
+
+    <form asp-action="Index" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="formFile" class="form-label">Выберите файл с анализируемым текстом (*.rtf)</label>
+            <input class="form-control" asp-for="File" type="file" accept=".rtf" id="formFile" required>
+        </div>
+        <div class="mb-3 d-grid gap-2">
+            <button type="submit" class="btn btn-primary">Анализировать</button>
+        </div>
+    </form>
+
+    @if (ViewBag.IsResult == true)
+    {
+        <h3>Текст:</h3>
+        <p>@ViewBag.Text</p>
+    }
 </div>
