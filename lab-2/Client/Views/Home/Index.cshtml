@@ -11,7 +11,7 @@
 
     <form asp-action="Index" enctype="multipart/form-data">
         <div class="mb-3">
-            <label for="formFile" class="form-label">Выберите файл с анализируемым текстом (*.rtf)</label>
+            <label for="formFile" class="form-label">Выберите файл с анализируемым текстом (*.rtf), или загрузите уже обработанный текст (*.json)</label>
             <input class="form-control" asp-for="File" type="file" accept=".rtf,.json" id="formFile" required>
         </div>
         <div class="mb-3 d-grid gap-2">
