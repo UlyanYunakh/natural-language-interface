@@ -39,12 +39,9 @@ namespace Client.Controllers
 
                 if (file.ContentType == "application/json")
                 {
-                    ResponceModel responceModel = JsonToModel(ViewBag.Text);
+                    List<WordModel> responceModel = JsonToModel(ViewBag.Text);
 
-                    string text = "";
-                    foreach (string str in responceModel.Sents)
-                        text += str + " ";
-                    ViewBag.Text = text;
+                    ViewBag.Text = null;
 
                     ViewBag.ResponceModel = responceModel;
 
@@ -78,13 +75,13 @@ namespace Client.Controllers
             }
         }
 
-        private ResponceModel JsonToModel(string json)
+        private List<WordModel> JsonToModel(string json)
         {
-            ResponceModel model = null;
+            List<WordModel> model = null;
 
             try
             {
-                model = JsonConvert.DeserializeObject<ResponceModel>(json);
+                model = JsonConvert.DeserializeObject<List<WordModel>>(json);
             }
             catch
             { }
@@ -92,9 +89,9 @@ namespace Client.Controllers
             return model;
         }
 
-        private async Task<ResponceModel> PostToPythonServer(string text)
+        private async Task<List<WordModel>> PostToPythonServer(string text)
         {
-            ResponceModel responceModel = null;
+            List<WordModel> responceModel = null;
             try
             {
                 HttpClient client = new HttpClient();
@@ -113,7 +110,7 @@ namespace Client.Controllers
                     {
                         byte[] responce = responseTask.Result.Content.ReadAsByteArrayAsync().Result;
                         string json = Encoding.UTF8.GetString(responce);
-                        responceModel = JsonConvert.DeserializeObject<ResponceModel>(json);
+                        responceModel = JsonConvert.DeserializeObject<List<WordModel>>(json);
                     });
 
                 return responceModel;
@@ -132,11 +129,11 @@ namespace Client.Controllers
         [HttpGet]
         public async Task<IActionResult> Download(string text)
         {
-            ResponceModel responceModel = await PostToPythonServer(text);
+            List<WordModel> responceModel = await PostToPythonServer(text);
             string file = JsonConvert.SerializeObject(responceModel);
             byte[] bytes = Encoding.UTF8.GetBytes(file);
             MemoryStream memoryStream = new MemoryStream(bytes);
-            return File(memoryStream, "application/json", "trees.json");
+            return File(memoryStream, "application/json", "analysisResult.json");
         }
     }
 }

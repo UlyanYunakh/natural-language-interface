@@ -11,7 +11,8 @@
 
     <form asp-action="Index" enctype="multipart/form-data">
         <div class="mb-3">
-            <label for="formFile" class="form-label">Выберите файл с анализируемым текстом (*.rtf), или загрузите уже обработанный текст (*.json)</label>
+            <label for="formFile" class="form-label">Выберите файл с анализируемым текстом (*.rtf), или загрузите уже
+                обработанный текст (*.json)</label>
             <input class="form-control" asp-for="File" type="file" accept=".rtf,.json" id="formFile" required>
         </div>
         <div class="mb-3 d-grid gap-2">
@@ -21,14 +22,69 @@
 
     @if (ViewBag.IsResult == true)
     {
-        <h3>Текст:</h3>
-        <p>@ViewBag.Text</p>
-        <h3>Деревья:</h3>
-        @for (int i = 0; i < ViewBag.ResponceModel.Sents.Count; i++)
+        if (@ViewBag.Text != null)
         {
-            <div class="my-3 overflow-auto">
-                <p>@ViewBag.ResponceModel.Sents[i]</p>
-                <pre class="bg-light p-2 border">@ViewBag.ResponceModel.Trees[i]</pre>  
+            <h3>Текст:</h3>
+            <p>@ViewBag.Text</p>
+        }
+        <h3>Результат анализа:</h3>
+        @foreach (WordModel word in ViewBag.ResponceModel)
+        {
+            <div class="my-1 overflow-auto">
+                <p>Нормальная форма: @word.Word</p>
+                @{
+                    string info = "";
+                    if (word.Synonym.Count != 0)
+                    {
+                        info += "Синоним: ";
+                        foreach (string str in word.Synonym)
+                            info += str + " ";
+                        info += "\n";
+                    }
+                    if (word.RelatedTo.Count != 0)
+                    {
+                        info += "Относится к: ";
+                        foreach (string str in word.RelatedTo)
+                            info += str + " ";
+                        info += "\n";
+                    }
+                    if (word.Antonym.Count != 0)
+                    {
+                        info += "Антоним: ";
+                        foreach (string str in word.Antonym)
+                            info += str + " ";
+                        info += "\n";
+                    }
+                    if (word.Hyponym.Count != 0)
+                    {
+                        info += "Гипоним: ";
+                        foreach (string str in word.Hyponym)
+                            info += str + " ";
+                        info += "\n";
+                    }
+                    if (word.Hyperonym.Count != 0)
+                    {
+                        info += "Гипероним: ";
+                        foreach (string str in word.Hyperonym)
+                            info += str + " ";
+                        info += "\n";
+                    }
+                    if (word.Definition.Count != 0)
+                    {
+                        info += "Определение: ";
+                        foreach (string str in word.Definition)
+                            info += str + " ";
+                        info += "\n";
+                    }
+                }
+                @if (info != "")
+                {
+                    <pre class="bg-light p-2 border">@info</pre>
+                }
+                else
+                {
+                    <pre class="bg-light p-2 border text-danger">Дополнительной информации нет</pre>
+                }
             </div>
         }
         <a class="btn btn-outline-primary my-3" asp-action="Download" asp-route-text="@ViewBag.Text">Сохранить</a>
