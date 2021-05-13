@@ -51,6 +51,12 @@ namespace Client.Services
                 {
                     "привет"
                 }));
+            _modules.Add(CreateModule(
+                new ThanksResponce(),
+                new List<string>()
+                {
+                    "спасибо"
+                }));
         }
 
         private IResponce CreateModule(IResponce module, List<string> KeyWords)
