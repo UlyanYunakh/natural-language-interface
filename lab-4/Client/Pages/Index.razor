@@ -1,0 +1,58 @@
+@page "/"
+@inject DialogService service
+<div class="row">
+    <div class="col-md-6 offset-md-3 bg-light">
+        <div class="chat">
+            @foreach ((int, string) message in _messages)
+            {
+                if (message.Item1 == 0)
+                {
+                    <div class="message message-system">
+                        @message.Item2
+                    </div>
+                }
+                else
+                {
+                    <div class="message message-user">
+                        @message.Item2
+                    </div>
+                }
+            }
+        </div>
+        <EditForm Model="@_text" OnValidSubmit="@Send" class="form">
+            <div class="row m-2 g-3 align-items-center">
+                <InputText @bind-Value="_text" id="text" class="col-11 form-control"></InputText>
+                <button type="submit" class="col-1 btn">
+                    <span class="oi oi-share"></span>
+                </button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code{
+    private string _text = "";
+    private List<(int, string)> _messages = new List<(int, string)>();
+    private void Send()
+    {
+        if (_text == "")
+            return;
+        _messages.Reverse();
+        _messages.Add((1, _text));
+        _messages.Reverse();
+        GetDialogResponce(_text);
+        _text = "";
+    }
+
+    public async void GetDialogResponce(string request)
+    {
+        string responce = await service.GetResponce(request);
+        if (responce != null)
+        {
+            _messages.Reverse();
+            _messages.Add((0, responce));
+            _messages.Reverse();
+            StateHasChanged();
+        }
+    }
+}
