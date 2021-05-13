@@ -7,4 +7,4 @@
 
 #### Отчет лаб3: https://docs.google.com/document/d/1BTUcJfCIERNhhRQC959ZwX1XPauBEyzDDE0XprseTj4/edit?usp=sharing
 
-#### Отчет лаб3: https://docs.google.com/document/d/1oJxZQDVkAg72fRW1E3tQI9kPiLqZMykTdmzas-vHtUM/edit?usp=sharing
+#### Отчет лаб4: https://docs.google.com/document/d/1oJxZQDVkAg72fRW1E3tQI9kPiLqZMykTdmzas-vHtUM/edit?usp=sharing
